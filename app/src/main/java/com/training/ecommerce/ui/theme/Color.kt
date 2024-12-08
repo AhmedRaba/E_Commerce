@@ -1,5 +1,18 @@
 package com.training.ecommerce.ui.theme
+
 import androidx.compose.ui.graphics.Color
+
+val primaryBlue = Color(0xFF40BFFF)
+val primaryRed = Color(0xFFFB7181)
+val primaryYellow = Color(0xFFFFC833)
+val primaryGreen = Color(0xFF53D1B6)
+val primaryPurple = Color(0xFF5C61F4)
+val neutralDark=Color(0xFF223263)
+val neutralGrey=Color(0xFF9098B1)
+val neutralLight=Color(0xFFEBF0FF)
+
+
+
 
 val primaryLight = Color(0xFF00658D)
 val onPrimaryLight = Color(0xFFFFFFFF)

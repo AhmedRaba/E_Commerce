@@ -1,4 +1,4 @@
-package com.training.ecommerce
+package com.training.ecommerce.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
