@@ -19,7 +19,7 @@ class AuthActivity : ComponentActivity() {
             ECommerceTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AuthNavigation(
-                        Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,34 +28,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.training.ecommerce.R
-import com.training.ecommerce.presentation.auth.component.SocialLoginButton
-import com.training.ecommerce.presentation.auth.navigation.AuthScreen
 import com.training.ecommerce.presentation.component.CustomButton
 import com.training.ecommerce.presentation.component.CustomTextField
 import com.training.ecommerce.ui.theme.neutralDark
 import com.training.ecommerce.ui.theme.neutralGrey
-import com.training.ecommerce.ui.theme.neutralLight
 import com.training.ecommerce.ui.theme.primaryBlue
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun RegisterScreen(
+    navController: NavController,
+) {
 
+    var userName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordConfirm by remember { mutableStateOf("") }
     val passwordVisibility = remember { mutableStateOf(false) }
-
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+        ) {
 
         Image(
-            modifier = Modifier
-                .padding(top = 68.dp),
+            modifier = Modifier.padding(top = 155.dp),
             painter = painterResource(id = R.drawable.ic_app_auth),
             contentDescription = "auth icon",
         )
@@ -64,7 +63,7 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Welcome to E-Commerce",
+            text = "Let's Get Started",
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             color = neutralDark
@@ -73,7 +72,7 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Sign in to continue",
+            text = "Create new Account",
             fontWeight = FontWeight.Light,
             fontSize = 12.sp,
             color = neutralGrey
@@ -81,7 +80,17 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(28.dp))
 
+        CustomTextField(
+            value = userName,
+            onValueChange = { userName = it },
+            label = "Full Name",
+            icon = R.drawable.ic_user,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next,
+            iconDescription = "mail icon",
+        )
 
+        Spacer(modifier = Modifier.height(8.dp))
 
         CustomTextField(
             value = email,
@@ -98,92 +107,57 @@ fun LoginScreen(navController: NavController) {
         CustomTextField(
             value = password,
             onValueChange = { password = it },
-            label = "Your Password",
+            label = "Password",
+            icon = R.drawable.ic_lock,
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Next,
+            iconDescription = "mail icon",
+            passwordVisibility = passwordVisibility
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        CustomTextField(
+            value = passwordConfirm,
+            onValueChange = { passwordConfirm = it },
+            label = "Password Again",
             icon = R.drawable.ic_lock,
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done,
-            passwordVisibility = passwordVisibility,
-            iconDescription = "password icon"
+            iconDescription = "mail icon",
+            passwordVisibility = passwordVisibility
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CustomButton(text = "Sign In", onClick = {})
+        CustomButton(text = "Sign Up", onClick = { /*TODO*/ })
 
-        Spacer(modifier = Modifier.height(21.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            HorizontalDivider(
-                color = neutralLight, thickness = 1.dp, modifier = Modifier.weight(1f)
-            )
-
-            Text(
-                text = "OR",
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = neutralGrey,
-                modifier = Modifier.padding(horizontal = 18.dp)
-            )
-
-            HorizontalDivider(
-                color = neutralLight, thickness = 1.dp, modifier = Modifier.weight(1f)
-            )
-
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        SocialLoginButton(
-            text = "Login with Google",
-            icon = R.drawable.ic_google,
-            iconDescription = "google icon"
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        SocialLoginButton(
-            text = "Login with facebook",
-            icon = R.drawable.ic_facebook,
-            iconDescription = "facebook icon"
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(text = "Forgot Password?",
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
-            color = primaryBlue,
-            modifier = Modifier.clickable {
-
-            })
-
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
         ) {
 
             Text(
-                text = "Don't have an account? ",
+                text = "have an account? ",
                 fontWeight = FontWeight.Light,
                 fontSize = 12.sp,
                 color = neutralGrey
             )
 
-            Text(text = "Register",
+            Text(text = "Sign In",
                 fontWeight = FontWeight.Bold,
                 fontSize = 12.sp,
                 color = primaryBlue,
                 modifier = Modifier.clickable {
-                    navController.navigate(AuthScreen.RegisterScreen.route)
+                    navController.popBackStack()
                 }
 
             )
         }
 
+
     }
+
 
 }

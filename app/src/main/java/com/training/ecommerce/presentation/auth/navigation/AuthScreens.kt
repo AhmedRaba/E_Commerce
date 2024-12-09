@@ -1,6 +1,6 @@
 package com.training.ecommerce.presentation.auth.navigation
 
 sealed class AuthScreen(val route: String) {
-    object LoginScreen : AuthScreen("login_screen")
-    object RegisterScreen : AuthScreen("register_screen")
+    data object LoginScreen : AuthScreen("login_screen")
+    data object RegisterScreen : AuthScreen("register_screen")
 }

@@ -32,6 +32,7 @@ import com.training.ecommerce.ui.theme.primaryRed
 
 @Composable
 fun CustomTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -42,8 +43,7 @@ fun CustomTextField(
     passwordVisibility: MutableState<Boolean> = remember {
         mutableStateOf(false)
     },
-    error: Boolean = true,
-    modifier: Modifier = Modifier,
+    error: Boolean = false,
 ) {
     val interactionSource =
         remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
