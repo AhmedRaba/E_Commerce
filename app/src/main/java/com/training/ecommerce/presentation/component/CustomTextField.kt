@@ -44,6 +44,7 @@ fun CustomTextField(
         mutableStateOf(false)
     },
     error: Boolean = false,
+    errorMessage: String = "Error",
 ) {
     val interactionSource =
         remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
@@ -61,7 +62,8 @@ fun CustomTextField(
         else -> neutralGrey
     }
 
-    TextField(value = value,
+    TextField(
+        value = value,
         onValueChange = onValueChange,
         label = {
             Text(
@@ -70,13 +72,15 @@ fun CustomTextField(
                 fontSize = 12.sp,
                 color = neutralGrey
             )
-        }, leadingIcon = {
+        },
+        leadingIcon = {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = iconDescription,
                 tint = iconColor,
             )
-        }, modifier = modifier
+        },
+        modifier = modifier
             .fillMaxWidth()
             .border(
                 width = 1.dp,
@@ -100,6 +104,15 @@ fun CustomTextField(
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None
-        }, interactionSource = interactionSource
+        },
+        interactionSource = interactionSource,
     )
+    if (error) {
+        Text(
+            text = errorMessage,
+            fontWeight = FontWeight.Light,
+            fontSize = 12.sp,
+            color = primaryRed
+        )
+    }
 }
