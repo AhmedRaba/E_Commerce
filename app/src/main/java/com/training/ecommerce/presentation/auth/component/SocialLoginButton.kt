@@ -27,11 +27,12 @@ fun SocialLoginButton(
     text: String,
     icon: Int,
     iconDescription: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
     Button(
-        onClick = {}, modifier = modifier
+        onClick = onClick, modifier = modifier
             .height(58.dp)
             .fillMaxWidth()
             .border(

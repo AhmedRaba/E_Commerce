@@ -102,8 +102,9 @@ fun RegisterScreen(
         when (authState) {
             is Result.Success -> {
                 Toast.makeText(
-                    context, "Login Successful!", Toast.LENGTH_SHORT
+                    context, "Check your email to verify", Toast.LENGTH_SHORT
                 ).show()
+                navController.popBackStack()
                 userNameError = false
                 emailError = false
                 passwordError = false

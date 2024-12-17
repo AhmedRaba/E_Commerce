@@ -214,17 +214,17 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        SocialLoginButton(
-            text = "Login with Google", icon = R.drawable.ic_google, iconDescription = "google icon"
-        )
+        SocialLoginButton(text = "Login with Google",
+            icon = R.drawable.ic_google,
+            iconDescription = "google icon",
+            onClick = {})
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        SocialLoginButton(
-            text = "Login with facebook",
+        SocialLoginButton(text = "Login with facebook",
             icon = R.drawable.ic_facebook,
-            iconDescription = "facebook icon"
-        )
+            iconDescription = "facebook icon",
+            onClick = {})
 
         Spacer(modifier = Modifier.height(16.dp))
 
