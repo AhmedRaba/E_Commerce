@@ -199,7 +199,7 @@ fun validateForm(
 }
 
 @Composable
-fun HeaderSection() {
+private fun HeaderSection() {
     Image(
         modifier = Modifier.padding(top = 68.dp),
         painter = painterResource(id = R.drawable.ic_app_auth),
@@ -229,7 +229,7 @@ fun HeaderSection() {
 }
 
 @Composable
-fun FormSection(
+private fun FormSection(
     email: String,
     onEmailChange: (String) -> Unit,
     emailError: Boolean,
@@ -272,14 +272,14 @@ fun FormSection(
 }
 
 @Composable
-fun SignInButton(onClick: () -> Unit) {
+private fun SignInButton(onClick: () -> Unit) {
     CustomButton(text = "Sign In", onClick = onClick)
     Spacer(modifier = Modifier.height(21.dp))
 }
 
 
 @Composable
-fun SocialLoginSection(
+private fun SocialLoginSection(
     googleSignIn: () -> Unit,
     facebookSignIn: () -> Unit,
 ) {
@@ -328,7 +328,7 @@ fun SocialLoginSection(
 
 
 @Composable
-fun FooterSection(navController: NavController) {
+private fun FooterSection(navController: NavController) {
     Text(text = "Forgot Password?",
         fontWeight = FontWeight.Bold,
         fontSize = 12.sp,

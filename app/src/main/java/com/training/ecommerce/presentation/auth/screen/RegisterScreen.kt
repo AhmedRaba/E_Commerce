@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -78,8 +79,7 @@ fun RegisterScreen(
 
 
     val isValidForm = if (isFormSubmitted) {
-        validateForm(
-            userName = userName,
+        validateForm(userName = userName,
             email = email,
             password = password,
             passwordConfirm = passwordConfirm,
@@ -90,8 +90,7 @@ fun RegisterScreen(
             userNameErrorMessage = { userNameErrorMessage = it },
             emailErrorMessage = { emailErrorMessage = it },
             passwordErrorMessage = { passwordErrorMessage = it },
-            passwordConfirmErrorMessage = { passwordConfirmErrorMessage = it }
-        )
+            passwordConfirmErrorMessage = { passwordConfirmErrorMessage = it })
     } else {
         false
     }
@@ -136,93 +135,30 @@ fun RegisterScreen(
 
         ) {
 
-        Image(
-            modifier = Modifier.padding(top = 155.dp),
-            painter = painterResource(id = R.drawable.ic_app_auth),
-            contentDescription = "auth icon",
-        )
+        HeaderSection()
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Let's Get Started",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = neutralDark
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Create new Account",
-            fontWeight = FontWeight.Light,
-            fontSize = 12.sp,
-            color = neutralGrey
-        )
-
-        Spacer(modifier = Modifier.height(28.dp))
-
-        CustomTextField(
-            value = userName,
-            onValueChange = { userName = it },
-            label = "Full Name",
-            icon = R.drawable.ic_user,
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Next,
-            iconDescription = "mail icon",
-            error = userNameError,
-            errorMessage = userNameErrorMessage
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        CustomTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = "Your Email",
-            icon = R.drawable.ic_mail,
-            keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next,
-            iconDescription = "mail icon",
-            error = emailError,
-            errorMessage = emailErrorMessage
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        CustomTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = "Password",
-            icon = R.drawable.ic_lock,
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Next,
-            iconDescription = "mail icon",
+        FormSection(
+            userName = userName,
+            userNameChange = { userName = it },
+            userNameError = userNameError,
+            userNameErrorMessage = userNameErrorMessage,
+            email = email,
+            onEmailChange = { email = it },
+            emailError = emailError,
+            emailErrorMessage = emailErrorMessage,
+            password = password,
+            onPasswordChange = { password = it },
+            passwordError = passwordError,
+            passwordErrorMessage = passwordErrorMessage,
             passwordVisibility = passwordVisibility,
-            error = passwordError,
-            errorMessage = passwordErrorMessage
+            passwordConfirm = passwordConfirm,
+            onPasswordConfirmChange = { passwordConfirm = it },
+            passwordConfirmError = passwordConfirmError,
+            passwordConfirmErrorMessage = passwordErrorMessage,
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
 
-        CustomTextField(
-            value = passwordConfirm,
-            onValueChange = { passwordConfirm = it },
-            label = "Password Again",
-            icon = R.drawable.ic_lock,
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done,
-            iconDescription = "mail icon",
-            passwordVisibility = passwordVisibility,
-            error = passwordConfirmError,
-            errorMessage = passwordConfirmErrorMessage
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        //SignUp
-        CustomButton(text = "Sign Up", onClick = {
+        SignUpButton(onClick = {
             isFormSubmitted = true
             Log.e("RegisterScreen", "Try to Register: ")
             if (isValidForm) {
@@ -232,31 +168,7 @@ fun RegisterScreen(
         })
 
 
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
-        ) {
-
-            Text(
-                text = "have an account? ",
-                fontWeight = FontWeight.Light,
-                fontSize = 12.sp,
-                color = neutralGrey
-            )
-
-            Text(text = "Sign In",
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-                color = primaryBlue,
-                modifier = Modifier.clickable {
-                    navController.popBackStack()
-                }
-
-            )
-        }
-
+        FooterSection(navController = navController)
 
     }
 
@@ -314,4 +226,145 @@ fun validateForm(
     }
     Log.e("validateForm", "isValid: $isValid ")
     return isValid
+}
+
+
+@Composable
+private fun HeaderSection() {
+    Image(
+        modifier = Modifier.padding(top = 155.dp),
+        painter = painterResource(id = R.drawable.ic_app_auth),
+        contentDescription = "auth icon",
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Text(
+        text = "Let's Get Started",
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        color = neutralDark
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Create new Account",
+        fontWeight = FontWeight.Light,
+        fontSize = 12.sp,
+        color = neutralGrey
+    )
+    Spacer(modifier = Modifier.height(28.dp))
+}
+
+@Composable
+private fun FormSection(
+    userName: String,
+    userNameChange: (String) -> Unit,
+    userNameError: Boolean,
+    userNameErrorMessage: String,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    emailError: Boolean,
+    emailErrorMessage: String,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordError: Boolean,
+    passwordErrorMessage: String,
+    passwordVisibility: MutableState<Boolean>,
+    passwordConfirm: String,
+    onPasswordConfirmChange: (String) -> Unit,
+    passwordConfirmError: Boolean,
+    passwordConfirmErrorMessage: String,
+) {
+    CustomTextField(
+        value = userName,
+        onValueChange = userNameChange,
+        label = "Full Name",
+        icon = R.drawable.ic_user,
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Next,
+        iconDescription = "mail icon",
+        error = userNameError,
+        errorMessage = userNameErrorMessage
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    CustomTextField(
+        value = email,
+        onValueChange = onEmailChange,
+        label = "Your Email",
+        icon = R.drawable.ic_mail,
+        keyboardType = KeyboardType.Email,
+        imeAction = ImeAction.Next,
+        iconDescription = "mail icon",
+        error = emailError,
+        errorMessage = emailErrorMessage
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    CustomTextField(
+        value = password,
+        onValueChange = onPasswordChange,
+        label = "Password",
+        icon = R.drawable.ic_lock,
+        keyboardType = KeyboardType.Password,
+        imeAction = ImeAction.Next,
+        iconDescription = "mail icon",
+        passwordVisibility = passwordVisibility,
+        error = passwordError,
+        errorMessage = passwordErrorMessage
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    CustomTextField(
+        value = passwordConfirm,
+        onValueChange = onPasswordConfirmChange,
+        label = "Password Again",
+        icon = R.drawable.ic_lock,
+        keyboardType = KeyboardType.Password,
+        imeAction = ImeAction.Done,
+        iconDescription = "mail icon",
+        passwordVisibility = passwordVisibility,
+        error = passwordConfirmError,
+        errorMessage = passwordConfirmErrorMessage
+    )
+    Spacer(modifier = Modifier.height(16.dp))
+}
+
+@Composable
+private fun SignUpButton(onClick: () -> Unit) {
+    CustomButton(
+        text = "Sign Up", onClick = onClick
+    )
+
+    Spacer(modifier = Modifier.height(24.dp))
+}
+
+@Composable
+private fun FooterSection(navController: NavController) {
+    Row(
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+    ) {
+
+        Text(
+            text = "have an account? ",
+            fontWeight = FontWeight.Light,
+            fontSize = 12.sp,
+            color = neutralGrey
+        )
+
+        Text(text = "Sign In",
+            fontWeight = FontWeight.Bold,
+            fontSize = 12.sp,
+            color = primaryBlue,
+            modifier = Modifier.clickable {
+                navController.popBackStack()
+            }
+
+        )
+    }
 }
