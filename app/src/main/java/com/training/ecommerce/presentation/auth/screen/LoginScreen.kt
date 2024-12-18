@@ -39,7 +39,6 @@ import androidx.navigation.NavController
 import com.training.ecommerce.R
 import com.training.ecommerce.data.model.User
 import com.training.ecommerce.data.utils.Result
-import com.training.ecommerce.data.utils.validateForm
 import com.training.ecommerce.presentation.auth.component.SocialLoginButton
 import com.training.ecommerce.presentation.auth.navigation.AuthScreen
 import com.training.ecommerce.presentation.auth.viewmodel.AuthViewModel
@@ -67,7 +66,7 @@ fun LoginScreen(
     var isFormSubmitted by remember { mutableStateOf(false) }
 
 
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
 
 
     val authState by viewModel.authLoginState.collectAsState()
@@ -80,15 +79,14 @@ fun LoginScreen(
         }
     }
 
-
     LaunchedEffect(authState) {
         if (authState != previousAuthState) {
             previousAuthState = authState
             when (authState) {
                 is Result.Success -> {
 
-                    snackbarHostState.currentSnackbarData?.dismiss()
-                    snackbarHostState.showSnackbar("Login Successful")
+                    snackBarHostState.currentSnackbarData?.dismiss()
+                    snackBarHostState.showSnackbar("Login Successful")
                     emailError = false
                     passwordError = false
                 }
@@ -98,8 +96,8 @@ fun LoginScreen(
                     passwordError = true
                     val errorMessage =
                         (authState as Result.Error).exception.message ?: "An unknown error occurred"
-                    snackbarHostState.currentSnackbarData?.dismiss()
-                    snackbarHostState.showSnackbar(errorMessage)
+                    snackBarHostState.currentSnackbarData?.dismiss()
+                    snackBarHostState.showSnackbar(errorMessage)
 
                 }
 
@@ -121,10 +119,8 @@ fun LoginScreen(
             passwordErrorMessage = { passwordErrorMessage = it },
         )
     } else {
-        true
+        false
     }
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -149,7 +145,9 @@ fun LoginScreen(
 
         SignInButton(onClick = {
             isFormSubmitted = true
+            Log.e("LoginScreen", "Try to Login")
             if (isValidForm) {
+                Log.e("LoginScreen", "Login")
                 viewModel.login(email, password)
             }
         })
@@ -160,9 +158,44 @@ fun LoginScreen(
 
         FooterSection(navController = navController)
 
-        SnackbarHost(hostState = snackbarHostState)
+        SnackbarHost(hostState = snackBarHostState)
+
 
     }
+}
+
+fun validateForm(
+    email: String,
+    password: String,
+    emailError: (Boolean) -> Unit,
+    emailErrorMessage: (String) -> Unit,
+    passwordError: (Boolean) -> Unit,
+    passwordErrorMessage: (String) -> Unit,
+): Boolean {
+
+    var isValid = true
+
+
+
+    if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        emailError(true)
+        emailErrorMessage("Please enter a valid email")
+        isValid = false
+    } else {
+        emailError(false)
+    }
+
+    if (password.isEmpty() || password.length < 6) {
+        passwordError(true)
+        passwordErrorMessage("Password should be at least 6 characters")
+        isValid = false
+    } else {
+        passwordError(false)
+    }
+
+    Log.e("validateForm", "validateForm:$isValid ")
+
+    return isValid
 }
 
 @Composable
