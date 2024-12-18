@@ -108,11 +108,15 @@ fun CustomTextField(
         interactionSource = interactionSource,
     )
     if (error) {
+
         Text(
+            modifier = Modifier.fillMaxWidth(),
             text = errorMessage,
-            fontWeight = FontWeight.Light,
+            fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
-            color = primaryRed
+            color = primaryRed,
         )
+
+
     }
 }
