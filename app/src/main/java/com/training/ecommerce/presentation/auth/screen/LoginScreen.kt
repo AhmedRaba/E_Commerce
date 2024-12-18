@@ -1,6 +1,6 @@
 package com.training.ecommerce.presentation.auth.screen
 
-import android.widget.Toast
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -65,7 +67,8 @@ fun LoginScreen(
     var isFormSubmitted by remember { mutableStateOf(false) }
 
 
-    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
 
     val authState by viewModel.authLoginState.collectAsState()
 
@@ -76,6 +79,38 @@ fun LoginScreen(
             viewModel.resetAuthState()
         }
     }
+
+
+    LaunchedEffect(authState) {
+        if (authState != previousAuthState) {
+            previousAuthState = authState
+            when (authState) {
+                is Result.Success -> {
+
+                    snackbarHostState.currentSnackbarData?.dismiss()
+                    snackbarHostState.showSnackbar("Login Successful")
+                    emailError = false
+                    passwordError = false
+                }
+
+                is Result.Error -> {
+                    emailError = true
+                    passwordError = true
+                    val errorMessage =
+                        (authState as Result.Error).exception.message ?: "An unknown error occurred"
+                    snackbarHostState.currentSnackbarData?.dismiss()
+                    snackbarHostState.showSnackbar(errorMessage)
+
+                }
+
+                else -> {}
+            }
+
+        }
+
+
+    }
+
     val isValidForm = if (isFormSubmitted) {
         validateForm(
             email = email,
@@ -89,36 +124,6 @@ fun LoginScreen(
         true
     }
 
-    LaunchedEffect(authState) {
-        if (authState != previousAuthState) {
-            previousAuthState = authState
-
-            when (authState) {
-                is Result.Success -> {
-                    Toast.makeText(
-                        context, "Login Successful!", Toast.LENGTH_SHORT
-                    ).show()
-                    emailError = false
-                    passwordError = false
-                }
-
-                is Result.Error -> {
-                    emailError = true
-                    passwordError = true
-                    val errorMessage =
-                        (authState as Result.Error).exception.message ?: "An unknown error occurred"
-                    Toast.makeText(context, "Login Failed: $errorMessage", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                else -> {}
-            }
-
-        }
-
-
-
-    }
 
     Column(
         modifier = Modifier
@@ -127,140 +132,199 @@ fun LoginScreen(
             .padding(horizontal = 16.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Image(
-            modifier = Modifier.padding(top = 68.dp),
-            painter = painterResource(id = R.drawable.ic_app_auth),
-            contentDescription = "auth icon",
+
+        HeaderSection()
+
+        FormSection(
+            email = email,
+            onEmailChange = { email = it },
+            emailError = emailError,
+            emailErrorMessage = emailErrorMessage,
+            password = password,
+            onPasswordChange = { password = it },
+            passwordError = passwordError,
+            passwordErrorMessage = passwordErrorMessage,
+            passwordVisibility = passwordVisibility
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Welcome to E-Commerce",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = neutralDark
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Sign in to continue",
-            fontWeight = FontWeight.Light,
-            fontSize = 12.sp,
-            color = neutralGrey
-        )
-
-        Spacer(modifier = Modifier.height(28.dp))
-
-        CustomTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = "Your Email",
-            icon = R.drawable.ic_mail,
-            keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next,
-            iconDescription = "mail icon",
-            error = emailError,
-            errorMessage = emailErrorMessage
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        CustomTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = "Your Password",
-            icon = R.drawable.ic_lock,
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done,
-            passwordVisibility = passwordVisibility,
-            iconDescription = "password icon",
-            error = passwordError,
-            errorMessage = passwordErrorMessage
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        CustomButton(text = "Sign In", onClick = {
+        SignInButton(onClick = {
             isFormSubmitted = true
             if (isValidForm) {
                 viewModel.login(email, password)
             }
         })
 
-        Spacer(modifier = Modifier.height(21.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-        ) {
+        SocialLoginSection(googleSignIn = {}, facebookSignIn = {})
 
-            HorizontalDivider(
-                color = neutralLight, thickness = 1.dp, modifier = Modifier.weight(1f)
-            )
 
-            Text(
-                text = "OR",
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = neutralGrey,
-                modifier = Modifier.padding(horizontal = 18.dp)
-            )
+        FooterSection(navController = navController)
 
-            HorizontalDivider(
-                color = neutralLight, thickness = 1.dp, modifier = Modifier.weight(1f)
-            )
+        SnackbarHost(hostState = snackbarHostState)
 
-        }
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
+@Composable
+fun HeaderSection() {
+    Image(
+        modifier = Modifier.padding(top = 68.dp),
+        painter = painterResource(id = R.drawable.ic_app_auth),
+        contentDescription = "auth icon",
+    )
 
-        SocialLoginButton(text = "Login with Google",
-            icon = R.drawable.ic_google,
-            iconDescription = "google icon",
-            onClick = {})
+    Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
+    Text(
+        text = "Welcome to E-Commerce",
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        color = neutralDark
+    )
 
-        SocialLoginButton(text = "Login with facebook",
-            icon = R.drawable.ic_facebook,
-            iconDescription = "facebook icon",
-            onClick = {})
+    Spacer(modifier = Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+    Text(
+        text = "Sign in to continue",
+        fontWeight = FontWeight.Light,
+        fontSize = 12.sp,
+        color = neutralGrey
+    )
 
-        Text(text = "Forgot Password?",
+    Spacer(modifier = Modifier.height(28.dp))
+
+}
+
+@Composable
+fun FormSection(
+    email: String,
+    onEmailChange: (String) -> Unit,
+    emailError: Boolean,
+    emailErrorMessage: String,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordError: Boolean,
+    passwordErrorMessage: String,
+    passwordVisibility: MutableState<Boolean>,
+) {
+    CustomTextField(
+        value = email,
+        onValueChange = onEmailChange,
+        label = "Your Email",
+        icon = R.drawable.ic_mail,
+        keyboardType = KeyboardType.Email,
+        imeAction = ImeAction.Next,
+        iconDescription = "mail icon",
+        error = emailError,
+        errorMessage = emailErrorMessage
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    CustomTextField(
+        value = password,
+        onValueChange = onPasswordChange,
+        label = "Your Password",
+        icon = R.drawable.ic_lock,
+        keyboardType = KeyboardType.Password,
+        imeAction = ImeAction.Done,
+        passwordVisibility = passwordVisibility,
+        iconDescription = "password icon",
+        error = passwordError,
+        errorMessage = passwordErrorMessage
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+}
+
+@Composable
+fun SignInButton(onClick: () -> Unit) {
+    CustomButton(text = "Sign In", onClick = onClick)
+    Spacer(modifier = Modifier.height(21.dp))
+}
+
+
+@Composable
+fun SocialLoginSection(
+    googleSignIn: () -> Unit,
+    facebookSignIn: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        HorizontalDivider(
+            color = neutralLight, thickness = 1.dp, modifier = Modifier.weight(1f)
+        )
+
+        Text(
+            text = "OR",
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            color = neutralGrey,
+            modifier = Modifier.padding(horizontal = 18.dp)
+        )
+
+        HorizontalDivider(
+            color = neutralLight, thickness = 1.dp, modifier = Modifier.weight(1f)
+        )
+
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    SocialLoginButton(
+        text = "Login with Google",
+        icon = R.drawable.ic_google,
+        iconDescription = "google icon",
+        onClick = googleSignIn
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    SocialLoginButton(
+        text = "Login with facebook",
+        icon = R.drawable.ic_facebook,
+        iconDescription = "facebook icon",
+        onClick = facebookSignIn
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+}
+
+
+@Composable
+fun FooterSection(navController: NavController) {
+    Text(text = "Forgot Password?",
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+        color = primaryBlue,
+        modifier = Modifier.clickable {
+
+        })
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+    ) {
+
+        Text(
+            text = "Don't have an account? ",
+            fontWeight = FontWeight.Light,
+            fontSize = 12.sp,
+            color = neutralGrey
+        )
+
+        Text(text = "Register",
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
             color = primaryBlue,
             modifier = Modifier.clickable {
+                navController.navigate(AuthScreen.RegisterScreen.route)
+            }
 
-            })
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
-        ) {
-
-            Text(
-                text = "Don't have an account? ",
-                fontWeight = FontWeight.Light,
-                fontSize = 12.sp,
-                color = neutralGrey
-            )
-
-            Text(text = "Register",
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-                color = primaryBlue,
-                modifier = Modifier.clickable {
-                    navController.navigate(AuthScreen.RegisterScreen.route)
-                }
-
-            )
-        }
-
+        )
     }
-
 }
