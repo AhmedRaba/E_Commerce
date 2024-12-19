@@ -90,6 +90,11 @@ dependencies {
     kapt(libs.hilt.android.compiler)
 
 
+    //DataStore
+    implementation(libs.androidx.datastore.preferences.core)
+    implementation (libs.androidx.datastore.preferences)
+
+
     //Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)

@@ -92,7 +92,7 @@ fun RegisterScreen(
             passwordErrorMessage = { passwordErrorMessage = it },
             passwordConfirmErrorMessage = { passwordConfirmErrorMessage = it })
     } else {
-        false
+        true
     }
 
 
