@@ -1,7 +1,7 @@
 package com.training.ecommerce.data.auth.repository
 
 import com.training.ecommerce.data.auth.datasource.AuthDataSource
-import com.training.ecommerce.data.model.User
+import com.training.ecommerce.domain.model.User
 import com.training.ecommerce.data.utils.Result
 
 import com.training.ecommerce.domain.repository.AuthRepository

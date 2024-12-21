@@ -40,9 +40,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.training.ecommerce.R
-import com.training.ecommerce.data.model.User
 import com.training.ecommerce.data.preferences.UserPreferencesManager
 import com.training.ecommerce.data.utils.Result
+import com.training.ecommerce.domain.model.User
 import com.training.ecommerce.presentation.auth.component.SocialLoginButton
 import com.training.ecommerce.presentation.auth.navigation.AuthScreen
 import com.training.ecommerce.presentation.auth.viewmodel.AuthViewModel
@@ -57,7 +57,7 @@ import com.training.ecommerce.ui.theme.primaryBlue
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: AuthViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel(),
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -74,7 +74,7 @@ fun LoginScreen(
     val snackBarHostState = remember { SnackbarHostState() }
 
 
-    val authState by viewModel.authLoginState.collectAsState()
+    val authState by authViewModel.authLoginState.collectAsState()
 
     var previousAuthState by remember { mutableStateOf<Result<User>?>(null) }
 
@@ -82,7 +82,7 @@ fun LoginScreen(
 
     DisposableEffect(navController) {
         onDispose {
-            viewModel.resetAuthState()
+            authViewModel.resetAuthState()
         }
     }
 
@@ -162,7 +162,7 @@ fun LoginScreen(
             Log.e("LoginScreen", "Try to Login")
             if (isValidForm) {
                 Log.e("LoginScreen", "Login")
-                viewModel.login(email, password)
+                authViewModel.login(email, password)
             }
         })
 

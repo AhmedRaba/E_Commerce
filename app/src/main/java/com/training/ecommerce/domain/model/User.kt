@@ -1,4 +1,4 @@
-package com.training.ecommerce.data.model
+package com.training.ecommerce.domain.model
 
 data class User(
     val id: String,

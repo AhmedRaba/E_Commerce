@@ -1,6 +1,6 @@
 package com.training.ecommerce.domain.repository
 
-import com.training.ecommerce.data.model.User
+import com.training.ecommerce.domain.model.User
 import com.training.ecommerce.data.utils.Result
 
 interface AuthRepository {

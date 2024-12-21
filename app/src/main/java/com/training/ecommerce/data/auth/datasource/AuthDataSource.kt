@@ -1,6 +1,6 @@
 package com.training.ecommerce.data.auth.datasource
 
-import com.training.ecommerce.data.model.User
+import com.training.ecommerce.domain.model.User
 import com.training.ecommerce.data.utils.Result
 
 

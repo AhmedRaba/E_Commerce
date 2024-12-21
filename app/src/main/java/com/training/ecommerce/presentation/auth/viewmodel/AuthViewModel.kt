@@ -2,7 +2,7 @@ package com.training.ecommerce.presentation.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.training.ecommerce.data.model.User
+import com.training.ecommerce.domain.model.User
 import com.training.ecommerce.data.utils.Result
 import com.training.ecommerce.domain.usecase.LoginUseCase
 import com.training.ecommerce.domain.usecase.RegisterUseCase

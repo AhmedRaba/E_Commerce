@@ -1,9 +1,10 @@
 [versions]
-agp = "8.5.0"
+agp = "8.5.2"
 coreSplashscreen = "1.0.1"
 datastorePreferences = "1.1.1"
 firebaseAuth = "23.1.0"
 firebaseBom = "33.7.0"
+firebaseMessaging = "24.1.0"
 hiltAndroid = "2.51.1"
 hiltAndroidCompiler = "2.51.1"
 hiltNavigationCompose = "1.2.0"
@@ -14,14 +15,14 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.04.01"
-navigationCompose = "2.8.4"
-uiTextGoogleFonts = "1.7.5"
+composeBom = "2024.12.01"
+navigationCompose = "2.8.5"
+uiTextGoogleFonts = "1.7.6"
 material = "1.12.0"
 appcompat = "1.7.0"
-constraintlayout = "2.1.4"
-navigationFragmentKtx = "2.8.4"
-navigationUiKtx = "2.8.4"
+constraintlayout = "2.2.0"
+navigationFragmentKtx = "2.8.5"
+navigationUiKtx = "2.8.5"
 coreKtxVersion = "1.6.1"
 
 [libraries]
@@ -35,6 +36,7 @@ firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "f
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

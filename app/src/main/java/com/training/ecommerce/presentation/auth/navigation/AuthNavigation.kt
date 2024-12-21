@@ -26,7 +26,7 @@ fun AuthNavigation(
         composable(route = AuthScreen.LoginScreen.route) {
             LoginScreen(
                 navController = navController,
-                viewModel = authViewModel
+                authViewModel = authViewModel,
             )
         }
 
