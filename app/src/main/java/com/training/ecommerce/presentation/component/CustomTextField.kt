@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +41,7 @@ fun CustomTextField(
     iconDescription: String,
     keyboardType: KeyboardType,
     imeAction: ImeAction,
+    onImeAction: (() -> Unit)? = null,
     passwordVisibility: MutableState<Boolean> = remember {
         mutableStateOf(false)
     },
@@ -99,6 +101,10 @@ fun CustomTextField(
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
             imeAction = imeAction
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = { onImeAction?.invoke() },
+            onDone = { onImeAction?.invoke() }
         ),
         visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisibility.value) {
             PasswordVisualTransformation()

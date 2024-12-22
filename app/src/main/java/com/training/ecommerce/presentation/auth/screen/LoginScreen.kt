@@ -178,7 +178,7 @@ fun LoginScreen(
     }
 }
 
-fun validateForm(
+private fun validateForm(
     email: String,
     password: String,
     emailError: (Boolean) -> Unit,

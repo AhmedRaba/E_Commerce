@@ -2,8 +2,8 @@ package com.training.ecommerce.data.auth.datasource
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.training.ecommerce.data.model.User
 import com.training.ecommerce.data.utils.Result
+import com.training.ecommerce.domain.model.User
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

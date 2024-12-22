@@ -14,10 +14,10 @@ fun HomeNavigation(
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = MainScreen.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = MainScreens.HomeScreen.route) {
 
-        composable(route = MainScreen.HomeScreen.route) {
-            HomeScreen(navController = navController)
+        composable(route = MainScreens.HomeScreen.route) {
+            HomeScreen()
         }
 
 
