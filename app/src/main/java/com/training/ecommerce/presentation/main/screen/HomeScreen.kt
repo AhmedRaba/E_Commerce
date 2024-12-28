@@ -39,7 +39,8 @@ import com.training.ecommerce.R
 import com.training.ecommerce.presentation.component.CustomTextField
 import com.training.ecommerce.presentation.main.component.CustomCard
 import com.training.ecommerce.presentation.main.component.ListType
-import com.training.ecommerce.presentation.main.component.SwipeableCategoryList
+import com.training.ecommerce.presentation.main.component.ProductItem
+import com.training.ecommerce.presentation.main.component.SwipeableList
 import com.training.ecommerce.ui.theme.ECommerceTheme
 import com.training.ecommerce.ui.theme.neutralDark
 import com.training.ecommerce.ui.theme.neutralLight
@@ -73,9 +74,14 @@ fun HomeScreen(
 
             SaleProductsSection(title = "Mega Sale", ListType.MEGA_SALE)
 
+            CustomCard(title = "Recommended Product", onClick = {})
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            RecommendedProductsSection()
+
         }
     })
-
 
 }
 
@@ -169,7 +175,7 @@ private fun CategorySection() {
 
     Spacer(modifier = Modifier.height(12.dp))
 
-    SwipeableCategoryList(ListType.CATEGORY)
+    SwipeableList(ListType.CATEGORY)
 
     Spacer(modifier = Modifier.height(24.dp))
 }
@@ -187,24 +193,69 @@ private fun SaleProductsSection(
     ) {
 
         Text(
-            text = title, fontWeight = FontWeight.Bold,
-            color = neutralDark, fontSize = 14.sp
+            text = title, fontWeight = FontWeight.Bold, color = neutralDark, fontSize = 14.sp
         )
 
         Text(text = "See More",
             fontWeight = FontWeight.Bold,
             color = primaryBlue,
             fontSize = 14.sp,
-            modifier = Modifier.clickable { }
-        )
+            modifier = Modifier.clickable { })
     }
 
     Spacer(modifier = Modifier.height(12.dp))
 
-    SwipeableCategoryList(listType)
+    SwipeableList(listType)
 
     Spacer(modifier = Modifier.height(24.dp))
 
 }
 
 
+@Composable
+fun RecommendedProductsSection() {
+
+    val products = listOf(
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+        Triple(R.drawable.iv_product, "Man Underwear", 20),
+    )
+
+    val columns = 2
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        products.chunked(columns).forEach { rowItems ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
+
+                horizontalArrangement = Arrangement.spacedBy(13.dp)
+            ) {
+                rowItems.forEach { product ->
+                    ProductItem(
+                        productImageRes = product.first,
+                        productName = product.second,
+                        originalPrice = product.third.toDouble(),
+                        showDiscount = false,
+                        showRating = false,
+                        onClick = {},
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                repeat(columns - rowItems.size) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+        }
+    }
+}

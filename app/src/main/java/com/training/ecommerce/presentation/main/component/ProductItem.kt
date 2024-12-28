@@ -31,14 +31,20 @@ import com.training.ecommerce.ui.theme.primaryRed
 
 @Composable
 fun ProductItem(
+    modifier: Modifier = Modifier,
     productImageRes: Int,
     productName: String,
     originalPrice: Double,
+    showDiscount: Boolean,
+    discountPrice: Double = 0.0,
+    discountPercent: Int = 0,
+    showRating: Boolean = false,
+    rating: Int = 0,
     onClick: () -> Unit,
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .border(
                 width = 2.dp,
@@ -49,13 +55,13 @@ fun ProductItem(
         shape = RectangleShape,
     ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Image(
-                modifier = Modifier
+                modifier = modifier
                     .height(130.dp)
                     .align(Alignment.CenterHorizontally)
                     .aspectRatio(1f)
@@ -72,15 +78,15 @@ fun ProductItem(
                 fontSize = 12.sp,
                 color = neutralDark
             )
+            if (showDiscount) {
 
-            Text(
-                text = "\$$originalPrice",
-                fontWeight = FontWeight.Bold,
-                color = primaryBlue,
-                fontSize = 12.sp
-            )
+                Text(
+                    text = "\$$discountPrice",
+                    fontWeight = FontWeight.Bold,
+                    color = primaryBlue,
+                    fontSize = 12.sp
+                )
 
-            if (true) {
                 Row {
                     Text(
                         text = "\$$originalPrice",
@@ -91,13 +97,22 @@ fun ProductItem(
                     )
 
                     Text(
-                        text = " Discount",
+                        text = " $discountPercent% Off",
                         fontWeight = FontWeight.Bold,
                         color = primaryRed,
                         fontSize = 10.sp
                     )
                 }
+
+            } else {
+                Text(
+                    text = "\$$originalPrice",
+                    fontWeight = FontWeight.Bold,
+                    color = primaryBlue,
+                    fontSize = 12.sp
+                )
             }
+
 
         }
 

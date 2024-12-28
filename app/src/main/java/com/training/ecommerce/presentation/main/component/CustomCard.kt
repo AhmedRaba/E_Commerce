@@ -51,6 +51,7 @@ fun CustomCard(
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 30.sp,
                 color = Color.White,
+                lineHeight = 40.sp,
                 modifier = Modifier
                     .padding(24.dp)
                     .wrapContentHeight()

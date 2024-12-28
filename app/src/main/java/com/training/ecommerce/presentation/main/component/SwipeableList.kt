@@ -12,7 +12,7 @@ import com.training.ecommerce.R
 import com.training.ecommerce.ui.theme.ECommerceTheme
 
 @Composable
-fun SwipeableCategoryList(
+fun SwipeableList(
     listType: ListType,
 ) {
 
@@ -64,6 +64,9 @@ fun SwipeableCategoryList(
                         productImageRes = iconRes,
                         productName = name,
                         originalPrice = price.toDouble(),
+                        showDiscount =true,
+                        discountPrice = 15.0,
+                        discountPercent = 25,
                         onClick = {}
                     )
 
@@ -77,6 +80,7 @@ fun SwipeableCategoryList(
                         productImageRes = iconRes,
                         productName = name,
                         originalPrice = price.toDouble(),
+                        showDiscount = false,
                         onClick = {}
                     )
 
@@ -94,7 +98,7 @@ fun SwipeableCategoryList(
 @Composable
 private fun Preview() {
     ECommerceTheme {
-        SwipeableCategoryList(ListType.CATEGORY)
+        SwipeableList(ListType.CATEGORY)
     }
 
 }
